@@ -4,6 +4,9 @@ An interactive Turkey map and information system powered by artificial intellige
 
 [🇹🇷 Türkçe README](README.tr.md)
 
+[Demo](https://dynamic-ai-map.vercel.app/)
+
+
 ## 🚀 Features
 
 - 🤖 Natural language queries with Gemini AI

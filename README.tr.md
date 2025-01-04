@@ -2,7 +2,13 @@
 
 Yapay zeka destekli interaktif Türkiye haritası ve bilgi sistemi. Google'ın Gemini AI teknolojisini kullanarak, Türkiye'nin şehirleri ve önemli lokasyonları hakkında dinamik bilgiler sunar.
 
+
+
 [🇬🇧 English README](README.md)
+
+
+[Demo](https://dynamic-ai-map.vercel.app/)'a gidin
+
 
 ## 🚀 Özellikler
 
