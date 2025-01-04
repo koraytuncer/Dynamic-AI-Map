@@ -1,7 +1,7 @@
 <template>
-  <div class="relative h-screen w-full bg-slate-900">
+  <div class="relative h-[100vh] w-full overflow-hidden bg-slate-900">
     <!-- Map Container with overlay -->
-    <div ref="mapContainer" class="h-full w-full z-10"></div>
+    <div ref="mapContainer" class="h-full w-full z-10 touch-pan-y overflow-hidden"></div>
     
     <!-- Dark Overlay for better contrast -->
     <div class="absolute inset-0 bg-black/10 pointer-events-none z-20"></div>
@@ -300,7 +300,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from "vue";
+import { ref, onMounted, onUnmounted, nextTick } from "vue";
 import L from "leaflet";
 import axios from "axios";
 import { useGeolocation } from "@vueuse/core";
@@ -344,7 +344,25 @@ const initializeMap = () => {
 };
 
 // Lifecycle hooks
-onMounted(() => initializeMap());
+onMounted(() => {
+  initializeMap()
+  
+  // Harita yüklendikten sonra invalidateSize çağıralım
+  nextTick(() => {
+    map.value?.invalidateSize()
+  })
+
+  // Ekran döndürme ve resize olaylarını dinleyelim
+  window.addEventListener('resize', () => {
+    map.value?.invalidateSize()
+  })
+
+  window.addEventListener('orientationchange', () => {
+    setTimeout(() => {
+      map.value?.invalidateSize()
+    }, 200)
+  })
+})
 onUnmounted(() => map.value?.remove());
 
 // API Handlers
@@ -515,5 +533,31 @@ const parseAIResponse = (response) => {
 .prose p {
   margin-top: 1.25em;
   margin-bottom: 1.25em;
+}
+
+/* iOS için -webkit-fill-available kullanımı */
+.h-\[100vh\] {
+  height: 100vh;
+  height: -webkit-fill-available;
+}
+
+/* iOS'ta bounce scroll'u engelleyelim */
+html, body {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Leaflet container için ek stiller */
+.leaflet-container {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 </style>
